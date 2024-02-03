@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: url('https://cdn.alza.cz/Foto/ImgGalery/Image/border-kolie-beh.jpg') no-repeat center center fixed; 
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+        #question {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        #result {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        #buttons {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        #wrongAnswerGif, #correctAnswerGif {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <div id="question">
+        <!-- Otázka bude vložena dynamicky -->
+    </div>
+    <div id="buttons">
+        <!-- Tlačítka budou vložena dynamicky -->
+    </div>
+    <p id="result"></p>
+    <img id="wrongAnswerGif" src="" alt="Wrong Answer GIF" />
+    <img id="correctAnswerGif" src="" alt="Correct Answer GIF" />
+
+    <script>
+        var questions = [
+            {
+                question: 'Co je to za zvíře?',
+                answers: ['pes', 'kočka', 'kapr', 'kůň'],
+                correctAnswer: 'pes'
+            },
+            {
+                question: 'Jaká je hlavní město České republiky?',
+                answers: ['Praha', 'Brno', 'Ostrava', 'Plzeň'],
+                correctAnswer: 'Praha'
+            }
+            // Přidejte další otázky podle potřeby
+        ];
+        var currentQuestionIndex = 0;
+
+        var wrongGifs = [
+            "https://gifdb.com/images/high/steve-harvey-facepalm-0r56trqbnlpfs6b4.gif",
+            "https://media1.tenor.com/m/oaOcV4xa2tIAAAAC/ryan-reynolds-facepalm.gif",
+            "https://www.gifcen.com/wp-content/uploads/2023/06/facepalm-gif-2.gif"
+        ];
+        var correctGifs = [
+            "https://i.pinimg.com/originals/bf/d6/d0/bfd6d06cf6af95c96be25204948f9b7a.gif",
+            "https://media.tenor.com/krjGu8PG5KkAAAAM/michael-rosen.gif",
+            "https://i.kym-cdn.com/photos/images/newsfeed/001/097/445/82f.gif"
+        ];
+
+        function showQuestion() {
+            var questionElement = document.getElementById('question');
+            var buttonsDiv = document.getElementById('buttons');
+            var currentQuestion = questions[currentQuestionIndex];
+
+            // Zobrazíme otázku
+            questionElement.textContent = currentQuestion.question;
+
+            // Odstraníme stará tlačítka
+            while (buttonsDiv.firstChild) {
+                buttonsDiv.removeChild(buttonsDiv.firstChild);
+            }
+
+            // Zamícháme odpovědi
+            var answers = currentQuestion.answers.sort(function() { return 0.5 - Math.random() });
+
+            // Dynamicky vytvoříme tlačítka pro odpovědi
+            answers.forEach(function(answer) {
+                var button = document.createElement('button');
+                button.onclick = function() { checkAnswer(answer); };
+                button.textContent = answer;
+                buttonsDiv.appendChild(button);
+            });
+        }
+
+        function checkAnswer(answer) {
+            var resultElement = document.getElementById('result');
+            var wrongAnswerGif = document.getElementById('wrongAnswerGif');
+            var correctAnswerGif = document.getElementById('correctAnswerGif');
+            var currentQuestion = questions[currentQuestionIndex];
+
+            if (answer === currentQuestion.correctAnswer) {
+                resultElement.textContent = 'Správně!';
+                resultElement.style.color = 'green';
+                correctAnswerGif.src = correctGifs[Math.floor(Math.random() * correctGifs.length)];
+                correctAnswerGif.style.display = 'block';
+                setTimeout(function() {
+                    correctAnswerGif.style.display = 'none';
+                    // Přejdeme na další otázku nebo na konečnou stránku
+                    if (currentQuestionIndex < questions.length - 1) {
+                        currentQuestionIndex++;
+                        showQuestion();
+                    } else {
+                        window.location.href = 'https://www.dropbox.com/scl/fi/8nzu7aka7ium7cejkki9o/test.html?rlkey=dhsbqhnjtx961rm9zrqqpj37m';
+                    }
+                }, 2000);
+            } else {
+                resultElement.textContent = 'Špatně, zkuste to znovu.';
+                resultElement.style.color = 'red';
+                wrongAnswerGif.src = wrongGifs[Math.floor(Math.random() * wrongGifs.length)];
+                wrongAnswerGif.style.display = 'block';
+                setTimeout(function() {
+                    wrongAnswerGif.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // Zobrazíme první otázku
+        showQuestion();
+    </script>
+</body>
+</html>
+						
